@@ -1,165 +1,245 @@
-
-{% extends "base.html" %}
-{% block content %}
-{% load static %}
-home page
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Netflix Clone</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'static/css/style.css' %}" />
-   
+    <title>MovieMuse</title>
+    <style>
+        /* Global styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Navbar styles */
+nav {
+    background-color: #000;
+    color: #fff;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #000;
+    min-width: 160px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: #fff;
+    padding: 12px 16px;
+    display: block;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.search {
+    margin-left: auto;
+}
+
+.search input[type="search"],
+.search button {
+    border: none;
+    padding: 10px;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+}
+
+.user span {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.logout-button {
+    padding: 8px 16px;
+    background-color: #FF4136;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+    background-color: #E70000;
+}
+
+/* Movie display section */
+.popular-movies {
+    padding: 40px 0;
+}
+
+.movie-cards {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.movie-card {
+    width: calc(33.33% - 20px);
+    margin: 0 10px 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.movie-card:hover {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.movie-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.movie-card h3 {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    margin: 0;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 600px;
+    width: 80%;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .movie-card {
+        width: calc(50% - 20px);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .movie-card {
+        width: calc(100% - 20px);
+    }
+}
+    </style>
+    
 </head>
-
-<body class="text-white" style="background-color: #141414;">
-    <header class="p-5 flex justify-between items-center">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png" height="30" alt="Netflix Logo" width="110">
-        
-        
-        <nav class="flex space-x-5">
-            <span><a href="/">Home</a></span>
-            
-            <div class="dropdown">
-                <span id="dropdownMenuButton" class="cursor-pointer">Genres ▼</span>
-                
-                <div id="dropdownMenu" class="dropdown-content hidden">
-                    <ul><a href="/genre/action/">Action</a></ul>
-                    <ul><a href="/genre/comedy/">Comedy</a></ul>
-                    <ul><a href="/genre/drama/">Drama</a></ul>
-                    <ul><a href="/genre/horror/">Horror</a></ul>
-                    <ul><a href="/genre/romance/">Romance</a></ul>
-                    <ul><a href="/genre/sciencefiction/">Science Fiction</a></ul>
-                    <ul><a href="/genre/fantasy/">Fantasy</a></ul>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo"><a href="#"><img src="logo.png" alt="MovieMuse Logo"></a></div>
+                <div class="dropdown">
+                    <span id="dropdownMenuButton" class="cursor-pointer nav-item">Genres ▼</span>
+                    <div id="dropdownMenu" class="dropdown-content hidden">
+                        <a href="/genre/action/" class="nav-item">Action</a>
+                        <a href="/genre/comedy/" class="nav-item">Comedy</a>
+                        <a href="/genre/drama/" class="nav-item">Drama</a>
+                        <a href="/genre/horror/" class="nav-item">Horror</a>
+                        <a href="/genre/romance/" class="nav-item">Romance</a>
+                        <a href="/genre/sciencefiction/" class="nav-item">Science Fiction</a>
+                        <a href="/genre/fantasy/" class="nav-item">Fantasy</a>
+                    </div>
                 </div>
-            </div>
-
-            <span><a href="/my-list">My List</a></span>
-        </nav>
-
-
-        <div class="flex space-x-5 items-center">
-            <form action="search" method="POST">
-                {% csrf_token %}
-                <input type="search" name="search_term" placeholder="Search" class="bg-gray-700 p-2 rounded">
-                <button class="bg-red-600 text-white p-2 rounded hover:bg-red-500">Search</button>
-            </form>
-            <div class="relative">
-                <a href="#" class="block p-2">Welcome, {{user.username}}</a>
-                <a href="{% url "base:login" %}">logout</a>
-            </div>
+                <div class="search">
+                    <form>
+                        <input type="search" placeholder="Search...">
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
+                <div class="user">
+                    <span>Welcome back, {{ user.username }}</span>
+                    <a href="{% url "base:login" %}" class="logout-button">Logout</a>
+                </div>
+            </nav>
         </div>
     </header>
-    <section class="relative py-20 px-10" style="background-image: url('{{featured_movie.image_cover.url}}'); background-size: cover; background-position: center;">
-        <div>
-            <h1 style="color: black;" class="text-5xl mb-5">{{featured_movie.title}}</h1>
-            <p style="color: black;" class="mb-5">{{featured_movie.description}}</p>
-            <div class="flex space-x-4">
-                <a href="/movie/{{featured_movie.uu_id}}">
-                    <button class="bg-red-600 text-white p-2 px-5 rounded hover:bg-red-500">Play</button>
-                </a>
+
+    <section class="popular-movies">
+        <div class="container">
+            <h2>Popular Comedy Movies</h2>
+            <div class="movie-cards">
+                {% for movie in movies %}
+                <div class="movie-card" onclick="showMovieDetails('{{ movie.uu_id }}')">
+                    <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
+                    <h3>{{ movie.title }}</h3>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </section>
-    <section class="py-10 px-5">
-    
-        <h2 class="text-xl mb-5">Popular on MovieMuse</h2>
-        <div class="flex space-x-5 overflow-x-auto">
 
-            {% for movie in movies %}
-            <div class="w-40 h-64 flex-shrink-0 film-card"
-                onclick="showModal(this)" 
-                data-title="{{ movie.title }}"
-                data-description="{{ movie.description }}"
-                data-release-date="{{ movie.release_date|date:'Y' }}"
-                data-genre="{{ movie.get_genre_display }}" 
-                data-length="{{ movie.length }}"
-                data-image-card-url="{{ movie.image_card.url }}"
-                data-image-cover-url="{{ movie.image_cover.url }}"
-                data-video-url="/movie/{{ movie.uu_id }}"
-                style="background-image: url('{{movie.image_card.url}}'); background-size: cover; background-position: center;">
-            </div>
-            {% endfor %}
-    </section>
-    
-    
-
-    <!-- Modal -->
-    <div class="modal" id="movieModal">
+    <div id="movieDetailsModal" class="modal">
         <div class="modal-content">
-            <div class="flex justify-between">
-                <h2 class="text-xl mb-5">Movie Title</h2>
-                <button onclick="hideModal()">X</button>
-            </div>
-            <img width="1000" height="100" src="https://bloximages.newyork1.vip.townnews.com/newsrecord.org/content/tncms/assets/v3/editorial/8/1e/81ea500c-45ac-11ee-a11e-a7402910a7e7/64ecaae69243a.image.jpg" alt="Movie Image" class=" mb-5">
-            <div class="flex justify-between mb-5">
-                <span>Year: 2023</span>
-                <span>Length: 2h 15min</span>
-            </div>
-            <p class="mb-5">Detailed information about the movie.</p>
-            <div class="flex space-x-4 mb-5">
-                <a href="movie.html">
-                    <button class="bg-red-600 text-white p-2 px-5 rounded hover:bg-red-500">Play</button>
-                </a>
-                <button id="addToListButton" onclick="addItemToList()" class="border border-white text-white p-2 px-5 rounded hover:bg-gray-700">
-                    Add to List
-                </button>
-            </div>
-            
+            <span class="close-button" onclick="hideMovieDetailsModal()">&times;</span>
+            <h2 id="movieTitle"></h2>
+            <p id="movieDescription"></p>
+            <p><strong>Genre:</strong> <span id="movieGenre"></span></p>
+            <p><strong>Length:</strong> <span id="movieLength"></span></p>
+            <p><strong>Rating:</strong> <span id="movieRating"></span></p>
+            <p><strong>Director:</strong> <span id="movieDirector"></span></p>
+            <p><strong>Stars:</strong> <span id="movieStars"></span></p>
         </div>
     </div>
 
-    <script>
-        function showModal(element) {
-            // Retrieve data attributes
-            const title = element.getAttribute('data-title');
-            const description = element.getAttribute('data-description');
-            const releaseDate = element.getAttribute('data-release-date');
-            const genre = element.getAttribute('data-genre');
-            const length = element.getAttribute('data-length');
-            const imageCardUrl = element.getAttribute('data-image-card-url');
-            const imageCoverUrl = element.getAttribute('data-image-cover-url');
-            const dataVideoUrl = element.getAttribute('data-video-url');
-        
-            // Update the modal's content with the movie details
-            const modal = document.getElementById('movieModal');
-            modal.querySelector('.modal-content h2').textContent = title;
-            modal.querySelector('.modal-content img').src = imageCoverUrl;
-            modal.querySelector('.modal-content a').href = dataVideoUrl;  
-            modal.querySelector('.modal-content img').alt = title + " Cover Image";
-            modal.querySelector('.modal-content .flex span:first-child').textContent = "Year: " + releaseDate;
-            modal.querySelector('.modal-content .flex span:nth-child(2)').textContent = "Genre: " + genre;
-            modal.querySelector('.modal-content .flex span:last-child').textContent = "Length: " + length + "min";
-            modal.querySelector('.modal-content p').textContent = description;
-        
-            // Show the modal
-            modal.style.display = 'block';
-            setTimeout(() => {
-                modal.classList.add('modal-show');
-            }, 50);
-        }
-        
-        function hideModal() {
-            const modal = document.querySelector('.modal');
-            modal.classList.remove('modal-show');
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
-        }
-        
-
-        window.onclick = function(event) {
-            if (event.target === document.getElementById('movieModal')) {
-                hideModal();
-            }
-        }
-
-    </script>
 </body>
-
+<script>
+    
+</script>
 </html>
-{% endblock content %}

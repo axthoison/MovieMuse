@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'base'
+    'base',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +129,7 @@ LOGIN_REDIRECT_URL = "base:home"
 LOGOUT_REDIRECT_URL = "base:signup"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+SCRIPTS_DIR = os.path.join(BASE_DIR, 'scripts')

@@ -19,12 +19,13 @@ class Movie(models.Model):
     uu_id = models.UUIDField(default=uuid.uuid4) #unique id
     title = models.CharField(max_length=255)
     description = models.TextField()
-    release_date = models.DateField()
     genre = models.CharField(max_length=100, choices=GENRE_CHOICES)
-    length = models.PositiveIntegerField()
-    image_card = models.ImageField(upload_to='movie_images/')
-    image_cover = models.ImageField(upload_to='movie_images/')
-    video = models.FileField(upload_to='movie_videos/')
+    length = models.CharField(max_length=20)
+    rating = models.CharField(max_length=10)
+    description = models.TextField()
+    image_url = models.URLField()
+    director = models.CharField(max_length=255)
+    stars = models.TextField()
     
     def __str__(self):
         return self.title
