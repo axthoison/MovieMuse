@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>MovieMuse</title>
     <style>
         /* Global styles */
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f8f8f8;
+    background-color: #10182F;
 }
 
 .container {
@@ -21,7 +22,7 @@ body {
 
 /* Navbar styles */
 nav {
-    background-color: #000;
+    background-color: transparent;
     color: #fff;
     padding: 10px 0;
     display: flex;
@@ -102,36 +103,54 @@ nav a {
     display: flex;
     flex-wrap: wrap;
 }
-
+.movie-cards-container {
+    height: 400px; /* Adjust the height as needed */
+    overflow-y: scroll;
+}
 .movie-card {
-    width: calc(33.33% - 20px);
+    width: calc(20% - 20px);
     margin: 0 10px 20px;
-    background-color: #fff;
-    border-radius: 5px;
+    border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+    position: relative;
 }
 
-.movie-card:hover {
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-}
-
-.movie-card img {
+.movie-image {
     width: 100%;
-    height: auto;
+    height: 300px;
+    border-radius: 10px;
     display: block;
 }
 
-.movie-card h3 {
+.movie-details {
+    padding: 10px;
+    color: #fff;
+    
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.movie-details h3 {
     font-size: 18px;
     font-weight: bold;
-    padding: 10px;
     margin: 0;
-    background-color: #000;
-    color: #fff;
-    text-align: center;
+    text-align: left;
 }
+
+.movie-details .rate {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+
+
+.movie-details .runtime {
+    font-size: 14px;
+    text-align: right;
+    margin-top: 5px;
+}
+
 
 /* Modal styles */
 .modal {
@@ -178,7 +197,6 @@ nav a {
     }
 }
     </style>
-    
 </head>
 <body>
     <header>
@@ -211,19 +229,29 @@ nav a {
         </div>
     </header>
 
-    <section class="popular-movies">
-        <div class="container">
-            <h2>Popular Comedy Movies</h2>
+ <section class="popular-movies">
+    <div class="container">
+        <h2>Popular Comedy Movies</h2>
+        <div class="movie-cards-container">
             <div class="movie-cards">
                 {% for movie in movies %}
                 <div class="movie-card" onclick="showMovieDetails('{{ movie.uu_id }}')">
-                    <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
-                    <h3>{{ movie.title }}</h3>
+                    <img class="movie-image" src="{{ movie.image_url }}" alt="{{ movie.title }}">
+                    <div class="movie-details">
+                        <h3>{{ movie.title }}</h3>
+                        <div class="rate">
+                            <span class="star">★</span>
+                            <span class="rate-value">{{ movie.rating }}</span>
+                        </div>
+                        <div class="runtime">{{ movie.length }}</div>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
 
     <div id="movieDetailsModal" class="modal">
         <div class="modal-content">

@@ -4,6 +4,7 @@ import pandas as pd
 import re
 import os
 import django
+import time
 
 
 from base.models import Movie
@@ -13,7 +14,7 @@ from django.db import transaction
 
 
 def run():
-    url = "https://www.imdb.com/search/title/?title_type=feature&genres=comedy"
+    url = "https://www.imdb.com/search/title/?genres=drama&explore=genres&title_type=feature"
     headers = {
         "Accept-Language": "en-US,en;q=0.5",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
@@ -55,6 +56,7 @@ def run():
             movie_data['director'] = "N/A"
             movie_data['stars'] = "N/A"
         data.append(movie_data)
+        time.sleep(5)
 
     # Saving movies to database
     with transaction.atomic():       
@@ -62,7 +64,7 @@ def run():
             movie = Movie(
                 title=movie_data['name'], 
                 description=movie_data['description'],
-                genre='comedy',  
+                genre='drama',  
                 length=movie_data['runtime'],
                 rating=movie_data['rating'],
                 image_url=movie_data['image_url'],
