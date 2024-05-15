@@ -14,6 +14,8 @@ class Movie(models.Model):
         ('romance', 'Romance'),
         ('science_fiction', 'Science Fiction'),
         ('fantasy', 'Fantasy'),
+        ('top50','Top 50'),
+        ('python','Python')
     ]
 
     uu_id = models.UUIDField(default=uuid.uuid4) #unique id
@@ -26,6 +28,7 @@ class Movie(models.Model):
     image_url = models.URLField()
     director = models.CharField(max_length=255)
     stars = models.TextField()
+
     
     def __str__(self):
         return self.title

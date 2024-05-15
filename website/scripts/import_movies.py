@@ -14,7 +14,7 @@ from django.db import transaction
 
 
 def run():
-    url = "https://www.imdb.com/search/title/?genres=drama&explore=genres&title_type=feature"
+    url = "https://m.imdb.com/chart/top/"
     headers = {
         "Accept-Language": "en-US,en;q=0.5",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
@@ -26,7 +26,7 @@ def run():
     data = []
 
     # extracting movie details
-    for container in movie_containers:
+    for container in movie_containers[:50]:
         movie_data = {}
         movie_data['name'] = re.sub(r'\d+\.\s', '', container.find("h3", class_="ipc-title__text").text.strip())
         movie_data['year'] = container.find('div', class_='sc-b189961a-7 feoqjK dli-title-metadata').find_all('span', class_='sc-b189961a-8 kLaxqf dli-title-metadata-item')[0].text.strip() if container.find('div', class_='sc-b189961a-7 feoqjK dli-title-metadata').find_all('span', class_='sc-b189961a-8 kLaxqf dli-title-metadata-item') else "N/A"
@@ -64,7 +64,7 @@ def run():
             movie = Movie(
                 title=movie_data['name'], 
                 description=movie_data['description'],
-                genre='drama',  
+                genre='top50',  
                 length=movie_data['runtime'],
                 rating=movie_data['rating'],
                 image_url=movie_data['image_url'],

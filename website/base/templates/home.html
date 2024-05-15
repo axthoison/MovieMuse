@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>MovieMuse</title>
     <style>
         /* Global styles */
@@ -11,7 +12,7 @@ body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #10182F;
+    background: #131313;
 }
 
 .container {
@@ -36,29 +37,6 @@ nav a {
     margin-right: 20px;
 }
 
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #000;
-    min-width: 160px;
-    z-index: 1;
-}
-
-.dropdown-content a {
-    color: #fff;
-    padding: 12px 16px;
-    display: block;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
 .search {
     margin-left: auto;
 }
@@ -72,83 +50,193 @@ nav a {
 .user {
     display: flex;
     align-items: center;
+    
+    margin-right: 70px;
 }
 
 .user span {
-    margin-right: 10px;
+    margin-right: -30px;
     font-size: 18px;
+    color: white;
+    font-weight: 600;
 }
 
 .logout-button {
     padding: 8px 16px;
-    background-color: #FF4136;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
+    background-color: #fff;
+    color: #653160;
+    border-radius: 30px;
     text-decoration: none;
     font-size: 16px;
     transition: background-color 0.3s;
+    border: 2px solid #ffffff;
 }
 
 .logout-button:hover {
-    background-color: #E70000;
+    background-color: transparent;
+    color: #fff;
 }
 
 /* Movie display section */
-.popular-movies {
-    padding: 40px 0;
-}
-
-.movie-cards {
-    display: flex;
-    flex-wrap: wrap;
-}
-.movie-cards-container {
-    height: 400px; /* Adjust the height as needed */
-    overflow-y: scroll;
-}
-.movie-card {
-    width: calc(20% - 20px);
-    margin: 0 10px 20px;
-    border-radius: 15px;
-    overflow: hidden;
-    cursor: pointer;
+.wrapper {
     position: relative;
+    max-width: 2000px;
+    width: 100%;
+    margin: 0 auto; /* Add this line to center the wrapper horizontally */
+    margin-top: 50px; /* Add margin-top to create some space from the top */
+}
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background-color: rgba(0, 0, 0, .5);
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+.arrow:hover {
+    background-color: rgba(0, 0, 0, .7);
+}
+.arrow.prev {
+    left: 0;
+}
+.arrow.next {
+    right: 0;
+}
+.card-wrapper {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 200px;
+    overflow-x: auto;
+    padding: 24px;
+    gap: 30px;
+    cursor: grab;
+    scroll-snap-type: x;
+    scroll-padding-inline: 24px;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+.card-wrapper::-webkit-scrollbar {
+    display: none;
+}
+.card-wrapper.grab {
+    cursor: grabbing;
+    user-select: none;
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+}
+.card-item {
+    scroll-snap-align: start;
+    overflow: hidden;
+    height: 400px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-radius: 10px;
 }
 
-.movie-image {
+.card-item:hover {
+    transform: scale(1.1); /* Zoom out effect */
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2); /* Shadow effect */
+}
+.card-item img {
     width: 100%;
     height: 300px;
+    object-fit: cover;
     border-radius: 10px;
-    display: block;
 }
-
-.movie-details {
+.card-info {
     padding: 10px;
     color: #fff;
+    margin: 0;
+    font-size: 18px;
     
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
 }
-
-.movie-details h3 {
-    font-size: 18px;
-    font-weight: bold;
+.card-info .card-title {
     margin: 0;
+    font-size: 18px;
+}
+.card-info .details {
+    display: flex;
+    justify-content: space-between; 
+    width: 100%;
+}
+
+
+.card-info .runtime,
+.card-info .rate {
+    margin-top: 5px;
+}
+.card-info .rate .star {
+    width: 15px;
+    height: 15px;
+    background-image: url('star.png');
+    background-size: cover;
+    margin-right: 5px;
+}
+.card-info .rate .star {
+    width: 15px;
+    height: 15px;
+    background-image: url('star.png');
+    background-size: cover;
+    margin-right: 5px;
+}
+
+.card-info .spacer {
+    flex-grow: 1;
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 15px;
+    text-decoration: none;
+    color: #ffffff;
     text-align: left;
 }
+.card-title:hover {
+    color: #006aff;
+}
 
-.movie-details .rate {
+card-info .details {
+    display: flex;
+    justify-content: space-between; /* Align items to the ends /
+    width: 100%; / Ensure the details div stretches across the entire width /
+}
+
+card-info .runtime,
+card-info .rate {
+    margin-top: 5px; / Adjust spacing between title and details /
+}
+
+card-info .rate {
     font-size: 14px;
-    margin-top: 10px;
+}
+card-info .spacer {
+    flex-grow: 1; / Allow the spacer to grow and push rating to the far right */
 }
 
 
-
-.movie-details .runtime {
+card-info .runtime {
     font-size: 14px;
     text-align: right;
     margin-top: 5px;
+}
+
+@media screen and (max-width: 575px) {
+    .arrow {
+        display: none;
+    }
+    .card-wrapper {
+        margin-left: -16px;
+        width: 100vw;
+    }
 }
 
 
@@ -183,75 +271,373 @@ nav a {
     cursor: pointer;
     font-size: 24px;
 }
-
-/* Responsive styles */
-@media screen and (max-width: 768px) {
-    .movie-card {
-        width: calc(50% - 20px);
-    }
+.search {
+    border: 2px solid #fff;
+    border-radius: 30px;
+    padding: 5px;
+    background-color: rgba(255, 255, 255, 0.1); /* Subtle background color */
+    max-width: 300px; /* Adjust width as needed */
+    margin: 0 auto; /* Center horizontally */
 }
 
-@media screen and (max-width: 480px) {
-    .movie-card {
-        width: calc(100% - 20px);
-    }
+.search form {
+    display: flex;
 }
+
+.search input[type="search"] {
+    flex: 1; /* Take remaining space */
+    border: none;
+    background: none;
+    padding: 8px;
+    color: #fff;
+    border-radius: 10px;
+    outline: none; /* Remove outline on focus */
+}
+
+.search button[type="submit"] {
+    background-color: #fff;
+    color: #653160;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search button[type="submit"]:hover {
+    background-color: #f0f0f0;
+}
+.search-icon {
+    color: #653160;
+    font-size: 20px;
+}
+header
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    z-index:1000;
+    background: #131313;
+
+
+}
+.navigation
+{
+    position: relative;
+    z-index: 1000;
+    margin-left:200px;
+}
+.navigation a
+{
+    position: relative;
+    font-size: 1.1em;
+    color: white;
+    text-decoration:none ;
+    font-weight: 500;
+    margin-left: 20px;
+}
+.navigation a::after
+{
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 3px;
+    background: white;
+    border-radius: 5px;
+    transform-origin: right;
+    transform: scaleX(0);
+    transition: transform .5s;
+}
+.navigation a:hover::after
+{
+    transform-origin: left;
+    transform: scaleX(1);
+}
+span.s
+{
+    margin-right: 100px;
+}
+.search
+{
+    margin-right: 20px;
+    margin-left:20px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+}
+
+.dropbtn {
+    position: relative;
+    font-size: 1.1em;
+    color: white;
+    text-decoration:none ;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-height: 200px;
+    z-index: 1;
+    left: 0
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    transform-origin: left;
+    transform: scaleX(1);
+}
+.hero-container {
+
+    color: #ffffff; /* White text */
+    padding: 300px;
+    text-align: center;
+    position: relative; /* Add position relative for z-index to work */
+}
+.hero-background {
+    position: absolute; /* Position the background image absolutely */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Send the background behind the content */
+    background-image: url('https://t4.ftcdn.net/jpg/06/24/83/81/360_F_624838164_MAe61kPa7soIWGWVeqJXw6aKToUp2iDz.jpg'); 
+    background-size: cover; /* Cover the entire container */
+    background-position: center;
+    filter: blur(10px); /* Adjust the blur radius as needed */
+}
+
+.hero-container h1 {
+    font-size: 3em; /* Large font size for the main title */
+    margin-bottom: 20px; /* Add some space below the title */
+}
+
+.hero-container p {
+    font-size: 1.2em; /* Medium font size for the paragraphs */
+    margin-bottom: 15px; /* Add some space below each paragraph */
+}
+
+.user a {
+    font-color:#653160;
+    margin-left:60px;
+}
+    
+   
     </style>
 </head>
 <body>
+    
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="#"><img src="logo.png" alt="MovieMuse Logo"></a></div>
-                <div class="dropdown">
-                    <span id="dropdownMenuButton" class="cursor-pointer nav-item">Genres ▼</span>
-                    <div id="dropdownMenu" class="dropdown-content hidden">
-                        <a href="/genre/action/" class="nav-item">Action</a>
-                        <a href="/genre/comedy/" class="nav-item">Comedy</a>
-                        <a href="/genre/drama/" class="nav-item">Drama</a>
-                        <a href="/genre/horror/" class="nav-item">Horror</a>
-                        <a href="/genre/romance/" class="nav-item">Romance</a>
-                        <a href="/genre/sciencefiction/" class="nav-item">Science Fiction</a>
-                        <a href="/genre/fantasy/" class="nav-item">Fantasy</a>
-                    </div>
+        <a style="font-size:25px; font-weight:bold;color:white;">MovieMuse</a>
+        <nav class="navigation">
+            <a href="#">Home</a>
+            <a href="#">Lists</a>
+            <a href="#">My Liked</a>
+            <div class="dropdown">
+                <button class="dropbtn" style="font-family: 'Poppins', sans-serif;">Genres ▼</button>
+                <div class="dropdown-content">
+                    <a href="/genre/action/" class="nav-item">Action</a>
+                    <a href="/genre/comedy/" class="nav-item">Comedy</a>
+                    <a href="/genre/drama/" class="nav-item">Drama</a>
+                    <a href="/genre/horror/" class="nav-item">Horror</a>
+                    <a href="/genre/romance/" class="nav-item">Romance</a>
+                    <a href="/genre/sciencefiction/" class="nav-item">Science Fiction</a>
+                    <a href="/genre/fantasy/" class="nav-item">Fantasy</a>
                 </div>
-                <div class="search">
-                    <form>
-                        <input type="search" placeholder="Search...">
-                        <button type="submit">Search</button>
-                    </form>
-                </div>
-                <div class="user">
-                    <span>Welcome back, {{ user.username }}</span>
-                    <a href="{% url "base:login" %}" class="logout-button">Logout</a>
-                </div>
-            </nav>
-        </div>
-    </header>
-
- <section class="popular-movies">
-    <div class="container">
-        <h2>Popular Comedy Movies</h2>
-        <div class="movie-cards-container">
-            <div class="movie-cards">
-                {% for movie in movies %}
-                <div class="movie-card" onclick="showMovieDetails('{{ movie.uu_id }}')">
-                    <img class="movie-image" src="{{ movie.image_url }}" alt="{{ movie.title }}">
-                    <div class="movie-details">
-                        <h3>{{ movie.title }}</h3>
-                        <div class="rate">
-                            <span class="star">★</span>
-                            <span class="rate-value">{{ movie.rating }}</span>
-                        </div>
-                        <div class="runtime">{{ movie.length }}</div>
-                    </div>
-                </div>
-                {% endfor %}
             </div>
+            <div class="search">
+                <form>
+                    <input type="search" placeholder="Search...">
+                    <button type="submit"><i class="fas fa-search search-icon"></i></button>
+                </form>
+            </div>
+        </nav>
+        <div class="user">
+            <span>Welcome back, {{ user.username }}</span>
+            <a href="{% url "base:login" %}" class="logout-button" style="font-weight:bold;">Logout</a>
+        </div>
+        
+    </header>
+    <div class="hero-container">
+        <div class="hero-background"></div>
+        <h1>Welcome to MovieMuse</h1>
+    
+        <p class="fade-in">Your ultimate destination for discovering and exploring a vast variety of movies.</p>
+        <p class="fade-in">Let us guide you through the world of cinema.</p>
+    </div>
+    
+    <div class="wrapper">
+        <h2 style="color: white; margin-top:50px;">Best Comedies of All Times</h2>
+        <button class="arrow prev"><i class="ri-arrow-left-s-line"></i></button>
+        <button class="arrow next"><i class="ri-arrow-right-s-line"></i></button>
+        <div class="card-wrapper">
+            {% for movie in movies %}
+                {% if movie.genre == 'comedy' %}
+                    <div class="card-item">
+                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
+                        <div class="card-info">
+                            <a href="#" class="card-title">{{ movie.title }}</a>
+                                <div class="details">
+                                    <div class="runtime">{{ movie.length }}</div>
+                                    <div class="rate">
+                                        <span class="star">★</span>
+                                        <span class="rate-value">{{ movie.rating }}</span>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
-</section>
-
+    <div class="wrapper">
+        <h2 style="color: white; margin-top:50px;">Sci-Fi Spectaculars: Explore the Future</h2>
+        <button class="arrow prev"><i class="ri-arrow-left-s-line"></i></button>
+        <button class="arrow next"><i class="ri-arrow-right-s-line"></i></button>
+        <div class="card-wrapper">
+            {% for movie in movies %}
+                {% if movie.genre == 'science_fiction' %}
+                    <div class="card-item">
+                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
+                        <div class="card-info">
+                            <a href="#" class="card-title">{{ movie.title }}</a>
+                                <div class="details">
+                                    <div class="runtime">{{ movie.length }}</div>
+                                    <div class="rate">
+                                        <span class="star">★</span>
+                                        <span class="rate-value">{{ movie.rating }}</span>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="wrapper">
+        <h2 style="color: white; margin-top:50px;">Drama Gems: Stories That Touch the Heart</h2>
+        <button class="arrow prev"><i class="ri-arrow-left-s-line"></i></button>
+        <button class="arrow next"><i class="ri-arrow-right-s-line"></i></button>
+        <div class="card-wrapper">
+            {% for movie in movies %}
+                {% if movie.genre == 'drama' %}
+                    <div class="card-item">
+                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
+                        <div class="card-info">
+                            <a href="#" class="card-title">{{ movie.title }}</a>
+                                <div class="details">
+                                    <div class="runtime">{{ movie.length }}</div>
+                                    <div class="rate">
+                                        <span class="star">★</span>
+                                        <span class="rate-value">{{ movie.rating }}</span>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="wrapper">
+        <h2 style="color: white; margin-top:50px;">Horror Hits: Scare Yourself Silly</h2>
+        <button class="arrow prev"><i class="ri-arrow-left-s-line"></i></button>
+        <button class="arrow next"><i class="ri-arrow-right-s-line"></i></button>
+        <div class="card-wrapper">
+            {% for movie in movies %}
+                {% if movie.genre == 'horror' %}
+                    <div class="card-item">
+                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
+                        <div class="card-info">
+                            <a href="#" class="card-title">{{ movie.title }}</a>
+                                <div class="details">
+                                    <div class="runtime">{{ movie.length }}</div>
+                                    <div class="rate">
+                                        <span class="star">★</span>
+                                        <span class="rate-value">{{ movie.rating }}</span>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="wrapper">
+        <h2 style="color: white; margin-top:50px;">Fantasy Adventures for All Ages</h2>
+        <button class="arrow prev"><i class="ri-arrow-left-s-line"></i></button>
+        <button class="arrow next"><i class="ri-arrow-right-s-line"></i></button>
+        <div class="card-wrapper">
+            {% for movie in movies %}
+                {% if movie.genre == 'fantasy' %}
+                    <div class="card-item">
+                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
+                        <div class="card-info">
+                            <a href="#" class="card-title">{{ movie.title }}</a>
+                                <div class="details">
+                                    <div class="runtime">{{ movie.length }}</div>
+                                    <div class="rate">
+                                        <span class="star">★</span>
+                                        <span class="rate-value">{{ movie.rating }}</span>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="wrapper">
+        <h2 style="color: white; margin-top:50px;">Enlightening Encounters</h2>
+        <button class="arrow prev"><i class="ri-arrow-left-s-line"></i></button>
+        <button class="arrow next"><i class="ri-arrow-right-s-line"></i></button>
+        <div class="card-wrapper">
+            {% for movie in movies %}
+                {% if movie.genre == 'top50' %}
+                    <div class="card-item">
+                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
+                        <div class="card-info">
+                            <a href="#" class="card-title">{{ movie.title }}</a>
+                                <div class="details">
+                                    <div class="runtime">{{ movie.length }}</div>
+                                    <div class="rate">
+                                        <span class="star">★</span>
+                                        <span class="rate-value">{{ movie.rating }}</span>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+         
 
     <div id="movieDetailsModal" class="modal">
         <div class="modal-content">
@@ -268,6 +654,51 @@ nav a {
 
 </body>
 <script>
+    const cardWrappers = document.querySelectorAll('.card-wrapper');
     
+    cardWrappers.forEach(cardWrapper => {
+      const widthToScroll = cardWrapper.children[0].offsetWidth
+      const arrowPrev = cardWrapper.parentElement.querySelector('.arrow.prev')
+      const arrowNext = cardWrapper.parentElement.querySelector('.arrow.next')
+      const cardBounding = cardWrapper.getBoundingClientRect()
+      const cardImageAndLink = cardWrapper.querySelectorAll('img, a')
+      let currScroll = 0
+      let initPos = 0
+      let clicked = false
+      
+      cardImageAndLink.forEach(item=> {
+        item.setAttribute('draggable', false)
+      })
+      
+      arrowPrev.onclick = function() {
+        cardWrapper.scrollLeft -= widthToScroll
+      }
+      
+      arrowNext.onclick = function() {
+        cardWrapper.scrollLeft += widthToScroll
+      }
+      
+      cardWrapper.onmousedown = function(e) {
+        cardWrapper.classList.add('grab')
+        initPos = e.clientX - cardBounding.left
+        currScroll = cardWrapper.scrollLeft
+        clicked = true
+      }
+      
+      cardWrapper.onmousemove = function(e) {
+        if(clicked) {
+          const xPos = e.clientX - cardBounding.left
+          cardWrapper.scrollLeft = currScroll + -(xPos - initPos)
+        }
+      }
+      
+      cardWrapper.onmouseup = mouseUpAndLeave
+      cardWrapper.onmouseleave = mouseUpAndLeave
+      
+      function mouseUpAndLeave() {
+        cardWrapper.classList.remove('grab')
+        clicked = false
+      }
+    });
 </script>
 </html>
