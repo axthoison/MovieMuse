@@ -2,6 +2,7 @@
 from django.db import models
 import uuid
 from django.conf import settings
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Movie(models.Model):
@@ -32,3 +33,13 @@ class Movie(models.Model):
     
     def __str__(self):
         return self.title
+
+class UserLikedMovie(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'movie')
+
+    def __str__(self):
+        return f"{self.user.username} likes {self.movie.title}"

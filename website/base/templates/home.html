@@ -72,6 +72,23 @@ nav a {
     border: 2px solid #ffffff;
 }
 
+.like-button:hover {
+    background-color: transparent;
+    color: #fff;
+}
+.like-button {
+    padding: 8px 16px;
+    background-color: #fff;
+    color: #653160;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight:bold;
+    transition: background-color 0.3s;
+    border: 2px solid #ffffff;
+    
+}
+
 .logout-button:hover {
     background-color: transparent;
     color: #fff;
@@ -239,38 +256,6 @@ card-info .runtime {
     }
 }
 
-
-/* Modal styles */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    max-width: 600px;
-    width: 80%;
-}
-
-.close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    font-size: 24px;
-}
 .search {
     border: 2px solid #fff;
     border-radius: 30px;
@@ -448,18 +433,110 @@ span.s
     font-color:#653160;
     margin-left:60px;
 }
+/* General Modal Styling */
+.modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #131313;
+    border-radius: 25px;
+    max-width: 900px;
+    height:640px;
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch; 
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    z-index:12000;
+}
+
+.modal-dialog {
+    margin: auto;
+}
+.modal-body {
     
-   
+    display: flex;
+}
+
+
+.modal-info p {
+    font-size: 19px;
+    margin-bottom: 15px;
+    color: #ffffff;
+}
+
+.modal-title {
+    text-align: center;
+}
+
+
+.modal-image {
+    flex: 1;
+    text-align: right;
+    margin-right: 20px;
+
+
+}
+
+.modal-image img {
+    width:400px;
+    height: 640px;
+    object-fit: cover;
+}
+
+.modal-info {
+    flex: 2;
+    margin-right : 20px;
+    margin-top:20px;
+}
+
+
+.modal-info h5 
+{
+   margin-right: 10px;
+   color: white;
+   font-weight: bold;
+   font-size: 20px;
+}
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #777;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    outline: none;
+}
+
+.close:hover {
+    background-color: #555;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.close-icon {
+    color: white;
+    font-size: 25px;
+}
+
+
     </style>
 </head>
 <body>
-    
+    {% csrf_token %}
+
     <header>
         <a style="font-size:25px; font-weight:bold;color:white;">MovieMuse</a>
         <nav class="navigation">
-            <a href="#">Home</a>
+            <a href="#">Home</a>    
             <a href="#">Lists</a>
-            <a href="#">My Liked</a>
+            <a href="{% url 'my_liked_movies' %}">My Liked</a>
             <div class="dropdown">
                 <button class="dropbtn" style="font-family: 'Poppins', sans-serif;">Genres ▼</button>
                 <div class="dropdown-content">
@@ -500,23 +577,48 @@ span.s
         <div class="card-wrapper">
             {% for movie in movies %}
                 {% if movie.genre == 'comedy' %}
-                    <div class="card-item">
-                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
-                        <div class="card-info">
-                            <a href="#" class="card-title">{{ movie.title }}</a>
-                                <div class="details">
-                                    <div class="runtime">{{ movie.length }}</div>
-                                    <div class="rate">
-                                        <span class="star">★</span>
-                                        <span class="rate-value">{{ movie.rating }}</span>
-                                    </div>
+                <div class="card-item">
+                    <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}">
+                    <div class="card-info">
+                        <a href="#" class="card-title">{{ movie.title }}</a>
+                            <div class="details">
+                                <div class="runtime">{{ movie.length }}</div>
+                                <div class="rate">
+                                    <span class="star">★</span>
+                                    <span class="rate-value">{{ movie.rating }}</span>
                                 </div>
-                        </div>
+                            </div>
                     </div>
+                </div>
                 {% endif %}
             {% endfor %}
         </div>
     </div>
+
+    <div class="modal fade" id="movieModal" tabindex="-1" role="dialog" aria-labelledby="movieModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="close-icon" aria-hidden="true">&times;</span>
+                </button>
+                
+                    <div class="modal-image">
+                        <img src="movieImage" id="movieImage" alt="Movie Image">
+                    </div>
+                    <div class="modal-info">
+                        <h5 id="movieModalLabel">Movie Details</h5>
+                        <p id="movieTitle"></p>
+                        <p id="movieDescription"></p>
+                        <p id="movieDirector"></p>
+                        <p id="movieStars"></p>
+                        <p id="movieRating"><span class="star">★</span></p>
+                        <button id="likeButton" class="like-button">Add to My List</button>
+                    </div>
+                
+            </div>
+        </div>
+    </div>
+
     <div class="wrapper">
         <h2 style="color: white; margin-top:50px;">Sci-Fi Spectaculars: Explore the Future</h2>
         <button class="arrow prev"><i class="ri-arrow-left-s-line"></i></button>
@@ -525,7 +627,7 @@ span.s
             {% for movie in movies %}
                 {% if movie.genre == 'science_fiction' %}
                     <div class="card-item">
-                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
+                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}">
                         <div class="card-info">
                             <a href="#" class="card-title">{{ movie.title }}</a>
                                 <div class="details">
@@ -548,8 +650,8 @@ span.s
         <div class="card-wrapper">
             {% for movie in movies %}
                 {% if movie.genre == 'drama' %}
-                    <div class="card-item">
-                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
+                    <div class="card-item" >
+                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}"data-id="{{ movie.id }}">
                         <div class="card-info">
                             <a href="#" class="card-title">{{ movie.title }}</a>
                                 <div class="details">
@@ -573,7 +675,7 @@ span.s
             {% for movie in movies %}
                 {% if movie.genre == 'horror' %}
                     <div class="card-item">
-                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
+                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}">
                         <div class="card-info">
                             <a href="#" class="card-title">{{ movie.title }}</a>
                                 <div class="details">
@@ -597,7 +699,7 @@ span.s
             {% for movie in movies %}
                 {% if movie.genre == 'fantasy' %}
                     <div class="card-item">
-                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
+                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}" >
                         <div class="card-info">
                             <a href="#" class="card-title">{{ movie.title }}</a>
                                 <div class="details">
@@ -619,41 +721,20 @@ span.s
         <button class="arrow next"><i class="ri-arrow-right-s-line"></i></button>
         <div class="card-wrapper">
             {% for movie in movies %}
-                {% if movie.genre == 'top50' %}
+                {% if movie.genre == 'python' %}
                     <div class="card-item">
-                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
-                        <div class="card-info">
-                            <a href="#" class="card-title">{{ movie.title }}</a>
-                                <div class="details">
-                                    <div class="runtime">{{ movie.length }}</div>
-                                    <div class="rate">
-                                        <span class="star">★</span>
-                                        <span class="rate-value">{{ movie.rating }}</span>
-                                    </div>
-                                </div>
-                        </div>
+                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}">
                     </div>
                 {% endif %}
             {% endfor %}
         </div>
     </div>
-         
-
-    <div id="movieDetailsModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" onclick="hideMovieDetailsModal()">&times;</span>
-            <h2 id="movieTitle"></h2>
-            <p id="movieDescription"></p>
-            <p><strong>Genre:</strong> <span id="movieGenre"></span></p>
-            <p><strong>Length:</strong> <span id="movieLength"></span></p>
-            <p><strong>Rating:</strong> <span id="movieRating"></span></p>
-            <p><strong>Director:</strong> <span id="movieDirector"></span></p>
-            <p><strong>Stars:</strong> <span id="movieStars"></span></p>
-        </div>
-    </div>
 
 </body>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
+    
     const cardWrappers = document.querySelectorAll('.card-wrapper');
     
     cardWrappers.forEach(cardWrapper => {
@@ -700,5 +781,42 @@ span.s
         clicked = false
       }
     });
+    $(document).ready(function() {
+        $('.card-item img').click(function() {
+            var movieId = $(this).data('id');
+    
+            $.ajax({
+                url: `/api/v1/movies/${movieId}/`,
+                method: 'GET',
+                success: function(movie) {
+                    $('#movieTitle').text(movie.title);
+                    $('#movieDirector').text('Director: ' + movie.director);
+                    $('#movieRuntime').text('Runtime: ' + movie.length);
+                    $('#movieStars').text('Stars: ' + movie.stars);
+                    $('#movieRating').text('Rating: ' + movie.rating);
+                    $('#movieDescription').text(movie.description);
+                    $('#movieImage').attr('src', movie.image_url);
+                    $('#likeButton').data('id', movie.id);
+    
+                    $('#movieModal').modal('show');
+                }
+            });
+        });
+    
+        $('#likeButton').click(function() {
+            var movieId = $(this).data('id');
+    
+            $.ajax({
+                url: '/like_movie/',
+                method: 'POST',
+                data: {
+                    'movie_id': movieId,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+
+            });
+        });
+    });
+    
 </script>
 </html>
