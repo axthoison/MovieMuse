@@ -150,6 +150,27 @@
             border: 2px solid #ffffff;
             
         }
+        .remove-button {
+            background-color: #FF4136; /* Red background */
+            color: #fff; /* White text */
+            border: none;
+            border-radius: 20px; /* Rounded corners */
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Hover style for the button */
+        .remove-button:hover {
+            background-color: #DC322F; /* Darker red on hover */
+        }
+
+        /* Active style for the button (when clicked) */
+        .remove-button:active {
+            background-color: #fff; /* White background */
+            color: #FF4136; /* Red text */
+        }
     </style>
 </head>
 <body>
@@ -169,7 +190,13 @@
                                 <span class="rate-value">{{ liked_movie.movie.rating }}</span>
                             </div>
                         </div>
+                        
                     </div>
+                    <form action="{% url 'remove_from_liked' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="movie_id" value="{{ liked_movie.movie.id }}">
+                        <button type="submit" class="remove-button">Remove from Liked</button>
+                    </form>
                 </div>
             {% endfor %}
         </div>

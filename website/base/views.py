@@ -97,6 +97,14 @@ def my_liked_movies(request):
     
     return render(request, 'my_liked_movies.html', context)
 
+def remove_from_liked(request):
+    if request.method == 'POST':
+        movie_id = request.POST.get('movie_id')
+        user_liked_movie = get_object_or_404(UserLikedMovie, user=request.user, movie__id=movie_id)
+        user_liked_movie.delete()
+        return redirect('my_liked_movies')
+    return redirect('home')  # Redirect to home page if not a POST request
+
 import pandas as pd
 def generate_recommendations(liked_movies, all_movies):
     
