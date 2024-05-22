@@ -98,20 +98,23 @@ def my_liked_movies(request):
     return render(request, 'my_liked_movies.html', context)
 
 import pandas as pd
-
 def generate_recommendations(liked_movies, all_movies):
-    #combina genres
+    
+    liked_movie_ids = set(liked_movie.movie.id for liked_movie in liked_movies)
+    
+    #combine genres for movies with same title
     unique_movies = {}
     for movie in all_movies:
-        if movie.title in unique_movies:
-            unique_movies[movie.title]['genre'].append(movie.genre)
-        else:
-            unique_movies[movie.title] = {'id': movie.id, 'genre': [movie.genre]}
+        if movie.id not in liked_movie_ids:  #skip movies already liked
+            if movie.title in unique_movies:
+                unique_movies[movie.title]['genre'].append(movie.genre)
+            else:
+                unique_movies[movie.title] = {'id': movie.id, 'genre': [movie.genre]}
 
-    # Convert unique_movies to DataFrame
+    
     unique_movies_df = pd.DataFrame(list(unique_movies.values()))
 
-    # Create genre vectors
+    #genre vecors
     genre_list = np.unique([genre for genres in unique_movies_df['genre'] for genre in genres])
 
     def create_genre_vector(genres):
@@ -119,29 +122,43 @@ def generate_recommendations(liked_movies, all_movies):
 
     unique_movies_df['genre_vector'] = unique_movies_df['genre'].apply(create_genre_vector)
 
-    #unique movies test file
-    unique_movies_df.to_csv('unique_movies.csv', index=False)
-
-    # convert liked movies to DataFrame
+    #liked movies to DF
     liked_movies_df = pd.DataFrame([{
         'id': lm.movie.id,
         'genre': lm.movie.genre,
         'genre_vector': create_genre_vector(lm.movie.genre)
     } for lm in liked_movies])
 
-    #similarity scores
+    #calculate user_vector based on liked movies
+    user_vector = np.sum(liked_movies_df['genre_vector'], axis=0)
+    user_vector_norm = user_vector / np.linalg.norm(user_vector)  # Normalize user_vector
+
+    #calculate similarity with dot product
     recommendations = []
-    for liked_movie in liked_movies_df.itertuples():
-        for movie in unique_movies_df.itertuples():
-            if liked_movie.id != movie.id:
-                similarity_score = np.dot(liked_movie.genre_vector, movie.genre_vector)
-                recommendations.append({
-                    'movieId': movie.id,
-                    'genre': movie.genre,
-                    'similarity_score': similarity_score
-                })
+    for movie in unique_movies_df.itertuples():
+        similarity_score = np.dot(user_vector_norm, movie.genre_vector)
+        recommendations.append({
+            'movieId': movie.id,
+            'genre': movie.genre,
+            'similarity_score': similarity_score
+        })
 
     recommendations_df = pd.DataFrame(recommendations)
     recommendations_df = recommendations_df.sort_values(by='similarity_score', ascending=False)
+   
+    recommended_movies_with_details = []
+    for movie_id in recommendations_df['movieId']:
+        recommended_movie = Movie.objects.filter(id=movie_id).first()
+        if recommended_movie:
+            #append details for the movie id that has the same title so we can display from database
+            similarity_score = recommendations_df.loc[recommendations_df['movieId'] == movie_id]['similarity_score'].iloc[0]
+            recommended_movies_with_details.append({
+                'id': recommended_movie.id,
+                'title': recommended_movie.title,
+                'image_url': recommended_movie.image_url,
+                'length': recommended_movie.length,
+                'rating': recommended_movie.rating,
+                'similarity_score': similarity_score
+            })
 
-    return recommendations_df.to_dict(orient='records')
+    return recommended_movies_with_details

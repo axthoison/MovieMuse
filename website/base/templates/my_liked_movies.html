@@ -115,10 +115,45 @@
                 width: calc((100% - 2 * 24px)); /* Adjust width for smaller screens */
             }
         }
-        
+        .table-container {
+            margin-top: 50px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border-bottom: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            color: #fff;
+        }
+        th {
+            background-color: #333;
+        }
+        .return-home-button:hover {
+            background-color: transparent;
+            color: #fff;
+        }
+        .return-home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 8px 16px;
+            background-color: #fff;
+            color: #653160;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight:bold;
+            transition: background-color 0.3s;
+            border: 2px solid #ffffff;
+            
+        }
     </style>
 </head>
 <body>
+    <a href="{% url 'home' %}" class="return-home-button">Return Home</a>
     <div class="wrapper">
         <h2 style="color: white; margin-top:50px;">My Liked Movies</h2>
         <div class="card-wrapper">
@@ -138,30 +173,44 @@
                 </div>
             {% endfor %}
         </div>
-    </div>
-    <h2 class="recommendations-title">Recommended Movies for You</h2>
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Movie ID</th>
-                    <th>Title</th>
-                    <th>Genres</th>
-                    <th>Similarity Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for recommendation in recommendations %}
+        <h2 style="color: white; margin-top:50px;">Recommended Movies for You</h2>
+        <div class="card-wrapper">
+            {% for recommendation in  recommendations|slice:":20" %}
+                <div class="card-item">
+                    <img src="{{ recommendation.image_url }}" alt="{{ recommendation.title }}" data-id="{{ recommendation.id }}">
+                    <div class="card-info">
+                        <a href="#" class="card-title">{{ recommendation.title }}</a>
+                        <div class="details">
+                            <div class="runtime">{{ recommendation.length }}</div>
+                            <div class="rate">
+                                <span class="star">★</span>
+                                <span class="rate-value">{{ recommendation.rating }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
                     <tr>
-                        <td>{{ recommendation.movieId }}</td>
-                        <td>{{ recommendation.title }}</td>
-                        <td>{{ recommendation.genre }}</td>
-                        <td>{{ recommendation.similarity_score }}</td>
+                        <th>Movie ID</th>
+                        <th>Title</th>
+                        <th>Similarity Score</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for recommendation in recommendations  %}
+                        <tr>
+                            <td>{{ recommendation.id }}</td>
+                            <td>{{ recommendation.title }}</td>
+                            <td>{{ recommendation.similarity_score }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 </body>
 </html>
