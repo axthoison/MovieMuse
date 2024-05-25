@@ -5,527 +5,496 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>MovieMuse</title>
     <style>
         /* Global styles */
-body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: #131313;
-}
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #131313;
+        }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-/* Navbar styles */
-nav {
-    background-color: transparent;
-    color: #fff;
-    padding: 10px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        /* Navbar styles */
+        nav {
+            background-color: transparent;
+            color: #fff;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-nav a {
-    color: #fff;
-    text-decoration: none;
-    margin-right: 20px;
-}
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 20px;
+        }
 
-.search {
-    margin-left: auto;
-}
+        .search {
+            margin-left: auto;
+        }
 
-.search input[type="search"],
-.search button {
-    border: none;
-    padding: 10px;
-}
+        .search input[type="search"],
+        .search button {
+            border: none;
+            padding: 10px;
+        }
 
-.user {
-    display: flex;
-    align-items: center;
-    
-    margin-right: 70px;
-}
+        .user {
+            display: flex;
+            align-items: center;
+            margin-right: 70px;
+        }
 
-.user span {
-    margin-right: -30px;
-    font-size: 18px;
-    color: white;
-    font-weight: 600;
-}
+        .user span {
+            margin-right: -30px;
+            font-size: 18px;
+            color: white;
+            font-weight: 600;
+        }
 
-.logout-button {
-    padding: 8px 16px;
-    background-color: #fff;
-    color: #653160;
-    border-radius: 30px;
-    text-decoration: none;
-    font-size: 16px;
-    transition: background-color 0.3s;
-    border: 2px solid #ffffff;
-}
+        .logout-button {
+            padding: 8px 16px;
+            background-color: #fff;
+            color: #653160;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            border: 2px solid #ffffff;
+        }
 
-.like-button:hover {
-    background-color: transparent;
-    color: #fff;
-}
-.like-button {
-    padding: 8px 16px;
-    background-color: #fff;
-    color: #653160;
-    border-radius: 30px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight:bold;
-    transition: background-color 0.3s;
-    border: 2px solid #ffffff;
-    
-}
+        .like-button:hover {
+            background-color: transparent;
+            color: #fff;
+        }
 
-.logout-button:hover {
-    background-color: transparent;
-    color: #fff;
-}
+        .like-button {
+            padding: 8px 16px;
+            background-color: #fff;
+            color: #653160;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            border: 2px solid #ffffff;
+        }
 
-/* Movie display section */
-.wrapper {
-    position: relative;
-    max-width: 2000px;
-    width: 100%;
-    margin: 0 auto; /* Add this line to center the wrapper horizontally */
-    margin-top: 50px; /* Add margin-top to create some space from the top */
-}
-.arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 32px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    background-color: rgba(0, 0, 0, .5);
-    font-size: 20px;
-    cursor: pointer;
-    border: none;
-    outline: none;
-}
-.arrow:hover {
-    background-color: rgba(0, 0, 0, .7);
-}
-.arrow.prev {
-    left: 0;
-}
-.arrow.next {
-    right: 0;
-}
-.card-wrapper {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 200px;
-    overflow-x: auto;
-    padding: 24px;
-    gap: 30px;
-    cursor: grab;
-    scroll-snap-type: x;
-    scroll-padding-inline: 24px;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-}
-.card-wrapper::-webkit-scrollbar {
-    display: none;
-}
-.card-wrapper.grab {
-    cursor: grabbing;
-    user-select: none;
-    scroll-snap-type: none;
-    scroll-behavior: auto;
-}
-.card-item {
-    scroll-snap-align: start;
-    overflow: hidden;
-    height: 400px;
-    transition: transform 0.3s, box-shadow 0.3s;
-    border-radius: 10px;
-}
+        .logout-button:hover {
+            background-color: transparent;
+            color: #fff;
+        }
 
-.card-item:hover {
-    transform: scale(1.1); /* Zoom out effect */
-    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2); /* Shadow effect */
-}
-.card-item img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 10px;
-}
-.card-info {
-    padding: 10px;
-    color: #fff;
-    margin: 0;
-    font-size: 18px;
-    
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-}
-.card-info .card-title {
-    margin: 0;
-    font-size: 18px;
-}
-.card-info .details {
-    display: flex;
-    justify-content: space-between; 
-    width: 100%;
-}
+        /* Movie display section */
+        .wrapper {
+            position: relative;
+            max-width: 2000px;
+            width: 100%;
+            margin: 0 auto;
+            margin-top: 50px;
+        }
 
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            background-color: rgba(0, 0, 0, .5);
+            font-size: 20px;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
 
-.card-info .runtime,
-.card-info .rate {
-    margin-top: 5px;
-}
-.card-info .rate .star {
-    width: 15px;
-    height: 15px;
-    background-image: url('star.png');
-    background-size: cover;
-    margin-right: 5px;
-}
-.card-info .rate .star {
-    width: 15px;
-    height: 15px;
-    background-image: url('star.png');
-    background-size: cover;
-    margin-right: 5px;
-}
+        .arrow:hover {
+            background-color: rgba(0, 0, 0, .7);
+        }
 
-.card-info .spacer {
-    flex-grow: 1;
-}
+        .arrow.prev {
+            left: 0;
+        }
 
-.card-title {
-    font-weight: bold;
-    font-size: 15px;
-    text-decoration: none;
-    color: #ffffff;
-    text-align: left;
-}
-.card-title:hover {
-    color: #006aff;
-}
+        .arrow.next {
+            right: 0;
+        }
 
-card-info .details {
-    display: flex;
-    justify-content: space-between; /* Align items to the ends /
-    width: 100%; / Ensure the details div stretches across the entire width /
-}
+        .card-wrapper {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: 200px;
+            overflow-x: auto;
+            padding: 24px;
+            gap: 30px;
+            cursor: grab;
+            scroll-snap-type: x;
+            scroll-padding-inline: 24px;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+        }
 
-card-info .runtime,
-card-info .rate {
-    margin-top: 5px; / Adjust spacing between title and details /
-}
+        .card-wrapper::-webkit-scrollbar {
+            display: none;
+        }
 
-card-info .rate {
-    font-size: 14px;
-}
-card-info .spacer {
-    flex-grow: 1; / Allow the spacer to grow and push rating to the far right */
-}
+        .card-wrapper.grab {
+            cursor: grabbing;
+            user-select: none;
+            scroll-snap-type: none;
+            scroll-behavior: auto;
+        }
 
+        .card-item {
+            scroll-snap-align: start;
+            overflow: hidden;
+            height: 400px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-radius: 10px;
+        }
 
-card-info .runtime {
-    font-size: 14px;
-    text-align: right;
-    margin-top: 5px;
-}
+        .card-item:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+        }
 
-@media screen and (max-width: 575px) {
-    .arrow {
-        display: none;
-    }
-    .card-wrapper {
-        margin-left: -16px;
-        width: 100vw;
-    }
-}
+        .card-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
 
-.search {
-    border: 2px solid #fff;
-    border-radius: 30px;
-    padding: 5px;
-    background-color: rgba(255, 255, 255, 0.1); /* Subtle background color */
-    max-width: 300px; /* Adjust width as needed */
-    margin: 0 auto; /* Center horizontally */
-}
+        .card-info {
+            padding: 10px;
+            color: #fff;
+            margin: 0;
+            font-size: 18px;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
 
-.search form {
-    display: flex;
-}
+        .card-info .card-title {
+            margin: 0;
+            font-size: 18px;
+        }
 
-.search input[type="search"] {
-    flex: 1; /* Take remaining space */
-    border: none;
-    background: none;
-    padding: 8px;
-    color: #fff;
-    border-radius: 10px;
-    outline: none; /* Remove outline on focus */
-}
+        .card-info .details {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
 
-.search button[type="submit"] {
-    background-color: #fff;
-    color: #653160;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
+        .card-info .runtime,
+        .card-info .rate {
+            margin-top: 5px;
+        }
 
-.search button[type="submit"]:hover {
-    background-color: #f0f0f0;
-}
-.search-icon {
-    color: #653160;
-    font-size: 20px;
-}
-header
-{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 20px 60px;
-    display: flex;
-    justify-content: space-between;
-    align-items:center;
-    z-index:1000;
-    background: #131313;
+        .card-info .rate .star {
+            width: 15px;
+            height: 15px;
+            background-image: url('star.png');
+            background-size: cover;
+            margin-right: 5px;
+        }
 
+        .card-info .spacer {
+            flex-grow: 1;
+        }
 
-}
-.navigation
-{
-    position: relative;
-    z-index: 1000;
-    margin-left:200px;
-}
-.navigation a
-{
-    position: relative;
-    font-size: 1.1em;
-    color: white;
-    text-decoration:none ;
-    font-weight: 500;
-    margin-left: 20px;
-}
-.navigation a::after
-{
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -6px;
-    width: 100%;
-    height: 3px;
-    background: white;
-    border-radius: 5px;
-    transform-origin: right;
-    transform: scaleX(0);
-    transition: transform .5s;
-}
-.navigation a:hover::after
-{
-    transform-origin: left;
-    transform: scaleX(1);
-}
-span.s
-{
-    margin-right: 100px;
-}
-.search
-{
-    margin-right: 20px;
-    margin-left:20px;
-}
+        .card-title {
+            font-weight: bold;
+            font-size: 15px;
+            text-decoration: none;
+            color: #ffffff;
+            text-align: left;
+        }
 
-.dropdown {
-    position: relative;
-    display: inline-block;
-    z-index: 1;
-}
+        .card-title:hover {
+            color: #006aff;
+        }
 
-.dropbtn {
-    position: relative;
-    font-size: 1.1em;
-    color: white;
-    text-decoration:none ;
-    font-weight: 500;
-    background: transparent;
-    border: none;
-}
+        @media screen and (max-width: 575px) {
+            .arrow {
+                display: none;
+            }
 
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-height: 200px;
-    z-index: 1;
-    left: 0
-}
+            .card-wrapper {
+                margin-left: -16px;
+                width: 100vw;
+            }
+        }
 
-.dropdown-content a {
-    color: #333;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
+        .search {
+            border: 2px solid #fff;
+            border-radius: 30px;
+            padding: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            max-width: 300px;
+            margin: 0 auto;
+        }
 
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
-}
+        .search form {
+            display: flex;
+        }
 
-.dropdown:hover .dropdown-content {
-    display: block;
-}
+        .search input[type="search"] {
+            flex: 1;
+            border: none;
+            background: none;
+            padding: 8px;
+            color: #fff;
+            border-radius: 10px;
+            outline: none;
+        }
 
-.dropdown:hover .dropbtn {
-    transform-origin: left;
-    transform: scaleX(1);
-}
-.hero-container {
+        .search button[type="submit"] {
+            background-color: #fff;
+            color: #653160;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-    color: #ffffff; /* White text */
-    padding: 300px;
-    text-align: center;
-    position: relative; /* Add position relative for z-index to work */
-}
-.hero-background {
-    position: absolute; /* Position the background image absolutely */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* Send the background behind the content */
-    background-image: url('https://t4.ftcdn.net/jpg/06/24/83/81/360_F_624838164_MAe61kPa7soIWGWVeqJXw6aKToUp2iDz.jpg'); 
-    background-size: cover; /* Cover the entire container */
-    background-position: center;
-    filter: blur(10px); /* Adjust the blur radius as needed */
-}
+        .search button[type="submit"]:hover {
+            background-color: #f0f0f0;
+        }
 
-.hero-container h1 {
-    font-size: 3em; /* Large font size for the main title */
-    margin-bottom: 20px; /* Add some space below the title */
-}
+        .search-icon {
+            color: #653160;
+            font-size: 20px;
+        }
 
-.hero-container p {
-    font-size: 1.2em; /* Medium font size for the paragraphs */
-    margin-bottom: 15px; /* Add some space below each paragraph */
-}
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: #131313;
+        }
 
-.user a {
-    font-color:#653160;
-    margin-left:60px;
-}
-/* General Modal Styling */
-.modal-content {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #131313;
-    border-radius: 25px;
-    max-width: 900px;
-    height:640px;
-    width: 80%;
-    display: flex;
-    flex-direction: row;
-    align-items: stretch; 
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    z-index:12000;
-}
+        .navigation {
+            position: relative;
+            z-index: 1000;
+            margin-left: 200px;
+        }
 
-.modal-dialog {
-    margin: auto;
-}
-.modal-body {
-    
-    display: flex;
-}
+        .navigation a {
+            position: relative;
+            font-size: 1.1em;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 20px;
+        }
 
+        .navigation a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 100%;
+            height: 3px;
+            background: white;
+            border-radius: 5px;
+            transform-origin: right;
+            transform: scaleX(0);
+            transition: transform .5s;
+        }
 
-.modal-info p {
-    font-size: 19px;
-    margin-bottom: 15px;
-    color: #ffffff;
-}
+        .navigation a:hover::after {
+            transform-origin: left;
+            transform: scaleX(1);
+        }
 
-.modal-title {
-    text-align: center;
-}
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+        }
 
+        .dropbtn {
+            position: relative;
+            font-size: 1.1em;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            background: transparent;
+            border: none;
+        }
 
-.modal-image {
-    flex: 1;
-    text-align: right;
-    margin-right: 20px;
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-height: 200px;
+            z-index: 1;
+            left: 0;
+        }
 
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
 
-}
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
 
-.modal-image img {
-    width:400px;
-    height: 640px;
-    object-fit: cover;
-}
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
 
-.modal-info {
-    flex: 2;
-    margin-right : 20px;
-    margin-top:20px;
-}
+        .dropdown:hover .dropbtn {
+            transform-origin: left;
+            transform: scaleX(1);
+        }
 
+        .hero-container {
+            color: #ffffff;
+            padding: 300px;
+            text-align: center;
+            position: relative;
+        }
 
-.modal-info h5 
-{
-   margin-right: 10px;
-   color: white;
-   font-weight: bold;
-   font-size: 20px;
-}
-.close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: #777;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    outline: none;
-}
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: url('https://t4.ftcdn.net/jpg/06/24/83/81/360_F_624838164_MAe61kPa7soIWGWVeqJXw6aKToUp2iDz.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+        }
 
-.close:hover {
-    background-color: #555;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
+        .hero-container h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
 
-.close-icon {
-    color: white;
-    font-size: 25px;
-}
+        .hero-container p {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
 
+        .user a {
+            font-color: #653160;
+            margin-left: 60px;
+        }
 
+        /* General Modal Styling */
+        .modal-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #131313;
+            border-radius: 25px;
+            max-width: 900px;
+            height: 640px;
+            width: 80%;
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            z-index: 12000;
+        }
+
+        .modal-dialog {
+            margin: auto;
+        }
+
+        .modal-body {
+            display: flex;
+        }
+
+        .modal-info p {
+            font-size: 19px;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .modal-title {
+            text-align: center;
+        }
+
+        .modal-image {
+            flex: 1;
+            text-align: right;
+            margin-right: 20px;
+        }
+
+        .modal-image img {
+            width: 400px;
+            height: 640px;
+            object-fit: cover;
+        }
+
+        .modal-info {
+            flex: 2;
+            margin-right: 20px;
+            margin-top: 20px;
+        }
+
+        .modal-info h5 {
+            margin-right: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #777;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            outline: none;
+        }
+
+        .close:hover {
+            background-color: #555;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .close-icon {
+            color: white;
+            font-size: 25px;
+        }
+        .modal.fade .modal-dialog {
+            transition: none; /* Remove transition */
+        }
     </style>
 </head>
 <body>
@@ -534,19 +503,19 @@ span.s
     <header>
         <a style="font-size:25px; font-weight:bold;color:white;">MovieMuse</a>
         <nav class="navigation">
-            <a href="#">Home</a>    
+            <a href="#">Home</a>
             <a href="#">Lists</a>
             <a href="{% url 'my_liked_movies' %}">My Liked</a>
             <div class="dropdown">
                 <button class="dropbtn" style="font-family: 'Poppins', sans-serif;">Genres ▼</button>
                 <div class="dropdown-content">
-                    <a href="/genre/action/" class="nav-item">Action</a>
-                    <a href="/genre/comedy/" class="nav-item">Comedy</a>
-                    <a href="/genre/drama/" class="nav-item">Drama</a>
-                    <a href="/genre/horror/" class="nav-item">Horror</a>
-                    <a href="/genre/romance/" class="nav-item">Romance</a>
-                    <a href="/genre/sciencefiction/" class="nav-item">Science Fiction</a>
-                    <a href="/genre/fantasy/" class="nav-item">Fantasy</a>
+                    <a href="action" class="nav-item">Action</a>
+                    <a href="comedy" class="nav-item">Comedy</a>
+                    <a href="drama" class="nav-item">Drama</a>
+                    <a href="horror" class="nav-item">Horror</a>
+                    <a href="romance" class="nav-item">Romance</a>
+                    <a href="science_fiction" class="nav-item">Science Fiction</a>
+                    <a href="fantasy" class="nav-item">Fantasy</a>
                 </div>
             </div>
             <div class="search">
@@ -560,16 +529,14 @@ span.s
             <span>Welcome back, {{ user.username }}</span>
             <a href="{% url "base:login" %}" class="logout-button" style="font-weight:bold;">Logout</a>
         </div>
-        
     </header>
     <div class="hero-container">
         <div class="hero-background"></div>
         <h1>Welcome to MovieMuse</h1>
-    
         <p class="fade-in">Your ultimate destination for discovering and exploring a vast variety of movies.</p>
         <p class="fade-in">Let us guide you through the world of cinema.</p>
     </div>
-    
+
     <div class="wrapper">
         <h2 style="color: white; margin-top:50px;">Best Comedies of All Times</h2>
         <button class="arrow prev"><i class="ri-arrow-left-s-line"></i></button>
@@ -581,13 +548,37 @@ span.s
                     <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}">
                     <div class="card-info">
                         <a href="#" class="card-title">{{ movie.title }}</a>
-                            <div class="details">
-                                <div class="runtime">{{ movie.length }}</div>
-                                <div class="rate">
-                                    <span class="star">★</span>
-                                    <span class="rate-value">{{ movie.rating }}</span>
-                                </div>
+                        <div class="details">
+                            <div class="runtime">{{ movie.length }}</div>
+                            <div class="rate">
+                                <span class="star">★</span>
+                                <span class="rate-value">{{ movie.rating }}</span>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="wrapper">
+        <h2 style="color: white; margin-top:50px;">Love Rush</h2>
+        <button class="arrow prev"><i class="ri-arrow-left-s-line"></i></button>
+        <button class="arrow next"><i class="ri-arrow-right-s-line"></i></button>
+        <div class="card-wrapper">
+            {% for movie in movies %}
+                {% if movie.genre == 'romance' %}
+                <div class="card-item">
+                    <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}">
+                    <div class="card-info">
+                        <a href="#" class="card-title">{{ movie.title }}</a>
+                        <div class="details">
+                            <div class="runtime">{{ movie.length }}</div>
+                            <div class="rate">
+                                <span class="star">★</span>
+                                <span class="rate-value">{{ movie.rating }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 {% endif %}
@@ -601,20 +592,18 @@ span.s
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span class="close-icon" aria-hidden="true">&times;</span>
                 </button>
-                
-                    <div class="modal-image">
-                        <img src="movieImage" id="movieImage" alt="Movie Image">
-                    </div>
-                    <div class="modal-info">
-                        <h5 id="movieModalLabel">Movie Details</h5>
-                        <p id="movieTitle"></p>
-                        <p id="movieDescription"></p>
-                        <p id="movieDirector"></p>
-                        <p id="movieStars"></p>
-                        <p id="movieRating"><span class="star">★</span></p>
-                        <button id="likeButton" class="like-button">Add to My List</button>
-                    </div>
-                
+                <div class="modal-image">
+                    <img src="movieImage" id="movieImage" alt="Movie Image">
+                </div>
+                <div class="modal-info">
+                    <h5 id="movieModalLabel">Movie Details</h5>
+                    <p id="movieTitle"></p>
+                    <p id="movieDescription"></p>
+                    <p id="movieDirector"></p>
+                    <p id="movieStars"></p>
+                    <p id="movieRating"><span class="star">★</span></p>
+                    <button id="likeButton" class="like-button">Add to My List</button>
+                </div>
             </div>
         </div>
     </div>
@@ -626,19 +615,19 @@ span.s
         <div class="card-wrapper">
             {% for movie in movies %}
                 {% if movie.genre == 'science_fiction' %}
-                    <div class="card-item">
-                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}">
-                        <div class="card-info">
-                            <a href="#" class="card-title">{{ movie.title }}</a>
-                                <div class="details">
-                                    <div class="runtime">{{ movie.length }}</div>
-                                    <div class="rate">
-                                        <span class="star">★</span>
-                                        <span class="rate-value">{{ movie.rating }}</span>
-                                    </div>
-                                </div>
+                <div class="card-item">
+                    <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}">
+                    <div class="card-info">
+                        <a href="#" class="card-title">{{ movie.title }}</a>
+                        <div class="details">
+                            <div class="runtime">{{ movie.length }}</div>
+                            <div class="rate">
+                                <span class="star">★</span>
+                                <span class="rate-value">{{ movie.rating }}</span>
+                            </div>
                         </div>
                     </div>
+                </div>
                 {% endif %}
             {% endfor %}
         </div>
@@ -650,19 +639,19 @@ span.s
         <div class="card-wrapper">
             {% for movie in movies %}
                 {% if movie.genre == 'drama' %}
-                    <div class="card-item" >
-                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}"data-id="{{ movie.id }}">
-                        <div class="card-info">
-                            <a href="#" class="card-title">{{ movie.title }}</a>
-                                <div class="details">
-                                    <div class="runtime">{{ movie.length }}</div>
-                                    <div class="rate">
-                                        <span class="star">★</span>
-                                        <span class="rate-value">{{ movie.rating }}</span>
-                                    </div>
-                                </div>
+                <div class="card-item">
+                    <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}">
+                    <div class="card-info">
+                        <a href="#" class="card-title">{{ movie.title }}</a>
+                        <div class="details">
+                            <div class="runtime">{{ movie.length }}</div>
+                            <div class="rate">
+                                <span class="star">★</span>
+                                <span class="rate-value">{{ movie.rating }}</span>
+                            </div>
                         </div>
                     </div>
+                </div>
                 {% endif %}
             {% endfor %}
         </div>
@@ -674,19 +663,19 @@ span.s
         <div class="card-wrapper">
             {% for movie in movies %}
                 {% if movie.genre == 'horror' %}
-                    <div class="card-item">
-                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}">
-                        <div class="card-info">
-                            <a href="#" class="card-title">{{ movie.title }}</a>
-                                <div class="details">
-                                    <div class="runtime">{{ movie.length }}</div>
-                                    <div class="rate">
-                                        <span class="star">★</span>
-                                        <span class="rate-value">{{ movie.rating }}</span>
-                                    </div>
-                                </div>
+                <div class="card-item">
+                    <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}">
+                    <div class="card-info">
+                        <a href="#" class="card-title">{{ movie.title }}</a>
+                        <div class="details">
+                            <div class="runtime">{{ movie.length }}</div>
+                            <div class="rate">
+                                <span class="star">★</span>
+                                <span class="rate-value">{{ movie.rating }}</span>
+                            </div>
                         </div>
                     </div>
+                </div>
                 {% endif %}
             {% endfor %}
         </div>
@@ -698,19 +687,19 @@ span.s
         <div class="card-wrapper">
             {% for movie in movies %}
                 {% if movie.genre == 'fantasy' %}
-                    <div class="card-item">
-                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}" >
-                        <div class="card-info">
-                            <a href="#" class="card-title">{{ movie.title }}</a>
-                                <div class="details">
-                                    <div class="runtime">{{ movie.length }}</div>
-                                    <div class="rate">
-                                        <span class="star">★</span>
-                                        <span class="rate-value">{{ movie.rating }}</span>
-                                    </div>
-                                </div>
+                <div class="card-item">
+                    <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}">
+                    <div class="card-info">
+                        <a href="#" class="card-title">{{ movie.title }}</a>
+                        <div class="details">
+                            <div class="runtime">{{ movie.length }}</div>
+                            <div class="rate">
+                                <span class="star">★</span>
+                                <span class="rate-value">{{ movie.rating }}</span>
+                            </div>
                         </div>
                     </div>
+                </div>
                 {% endif %}
             {% endfor %}
         </div>
@@ -722,102 +711,99 @@ span.s
         <div class="card-wrapper">
             {% for movie in movies %}
                 {% if movie.genre == 'python' %}
-                    <div class="card-item">
-                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}">
-                    </div>
+                <div class="card-item">
+                    <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}">
+                </div>
                 {% endif %}
             {% endfor %}
         </div>
     </div>
 
-</body>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    
-    const cardWrappers = document.querySelectorAll('.card-wrapper');
-    
-    cardWrappers.forEach(cardWrapper => {
-      const widthToScroll = cardWrapper.children[0].offsetWidth
-      const arrowPrev = cardWrapper.parentElement.querySelector('.arrow.prev')
-      const arrowNext = cardWrapper.parentElement.querySelector('.arrow.next')
-      const cardBounding = cardWrapper.getBoundingClientRect()
-      const cardImageAndLink = cardWrapper.querySelectorAll('img, a')
-      let currScroll = 0
-      let initPos = 0
-      let clicked = false
-      
-      cardImageAndLink.forEach(item=> {
-        item.setAttribute('draggable', false)
-      })
-      
-      arrowPrev.onclick = function() {
-        cardWrapper.scrollLeft -= widthToScroll
-      }
-      
-      arrowNext.onclick = function() {
-        cardWrapper.scrollLeft += widthToScroll
-      }
-      
-      cardWrapper.onmousedown = function(e) {
-        cardWrapper.classList.add('grab')
-        initPos = e.clientX - cardBounding.left
-        currScroll = cardWrapper.scrollLeft
-        clicked = true
-      }
-      
-      cardWrapper.onmousemove = function(e) {
-        if(clicked) {
-          const xPos = e.clientX - cardBounding.left
-          cardWrapper.scrollLeft = currScroll + -(xPos - initPos)
-        }
-      }
-      
-      cardWrapper.onmouseup = mouseUpAndLeave
-      cardWrapper.onmouseleave = mouseUpAndLeave
-      
-      function mouseUpAndLeave() {
-        cardWrapper.classList.remove('grab')
-        clicked = false
-      }
-    });
-    $(document).ready(function() {
-        $('.card-item img').click(function() {
-            var movieId = $(this).data('id');
-    
-            $.ajax({
-                url: `/api/v1/movies/${movieId}/`,
-                method: 'GET',
-                success: function(movie) {
-                    $('#movieTitle').text(movie.title);
-                    $('#movieDirector').text('Director: ' + movie.director);
-                    $('#movieRuntime').text('Runtime: ' + movie.length);
-                    $('#movieStars').text('Stars: ' + movie.stars);
-                    $('#movieRating').text('Rating: ' + movie.rating);
-                    $('#movieDescription').text(movie.description);
-                    $('#movieImage').attr('src', movie.image_url);
-                    $('#likeButton').data('id', movie.id);
-                    
-                    $('#movieModal').modal('show');
-                    
-                }
-            });
-        });
-    
-        $('#likeButton').click(function() {
-            var movieId = $(this).data('id');
-    
-            $.ajax({
-                url: '/like_movie/',
-                method: 'POST',
-                data: {
-                    'movie_id': movieId,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const cardWrappers = document.querySelectorAll('.card-wrapper');
 
+        cardWrappers.forEach(cardWrapper => {
+            const widthToScroll = cardWrapper.children[0].offsetWidth;
+            const arrowPrev = cardWrapper.parentElement.querySelector('.arrow.prev');
+            const arrowNext = cardWrapper.parentElement.querySelector('.arrow.next');
+            const cardBounding = cardWrapper.getBoundingClientRect();
+            const cardImageAndLink = cardWrapper.querySelectorAll('img, a');
+            let currScroll = 0;
+            let initPos = 0;
+            let clicked = false;
+
+            cardImageAndLink.forEach(item => {
+                item.setAttribute('draggable', false);
+            });
+
+            arrowPrev.onclick = function() {
+                cardWrapper.scrollLeft -= widthToScroll;
+            };
+
+            arrowNext.onclick = function() {
+                cardWrapper.scrollLeft += widthToScroll;
+            };
+
+            cardWrapper.onmousedown = function(e) {
+                cardWrapper.classList.add('grab');
+                initPos = e.clientX - cardBounding.left;
+                currScroll = cardWrapper.scrollLeft;
+                clicked = true;
+            };
+
+            cardWrapper.onmousemove = function(e) {
+                if (clicked) {
+                    const xPos = e.clientX - cardBounding.left;
+                    cardWrapper.scrollLeft = currScroll + -(xPos - initPos);
+                }
+            };
+
+            cardWrapper.onmouseup = mouseUpAndLeave;
+            cardWrapper.onmouseleave = mouseUpAndLeave;
+
+            function mouseUpAndLeave() {
+                cardWrapper.classList.remove('grab');
+                clicked = false;
+            }
+        });
+
+        $(document).ready(function() {
+            $('.card-item img').click(function() {
+                var movieId = $(this).data('id');
+
+                $.ajax({
+                    url: `/api/v1/movies/${movieId}/`,
+                    method: 'GET',
+                    success: function(movie) {
+                        $('#movieTitle').text(movie.title);
+                        $('#movieDirector').text('Director: ' + movie.director);
+                        $('#movieRuntime').text('Runtime: ' + movie.length);
+                        $('#movieStars').text('Stars: ' + movie.stars);
+                        $('#movieRating').text('Rating: ' + movie.rating);
+                        $('#movieDescription').text(movie.description);
+                        $('#movieImage').attr('src', movie.image_url);
+                        $('#likeButton').data('id', movie.id);
+
+                        $('#movieModal').modal('show'); // Use Bootstrap's method to show the modal
+                    }
+                });
+            });
+
+            $('#likeButton').click(function() {
+                var movieId = $(this).data('id');
+
+                $.ajax({
+                    url: '/like_movie/',
+                    method: 'POST',
+                    data: {
+                        'movie_id': movieId,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                });
             });
         });
-    });
-    
-</script>
+    </script>
+</body>
 </html>

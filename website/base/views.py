@@ -170,3 +170,45 @@ def generate_recommendations(liked_movies, all_movies):
             })
 
     return recommended_movies_with_details
+def action(request):
+    movies = Movie.objects.all()
+    context = {
+        'movies': movies,
+    }
+    return render(request, "action.html", context)
+def comedy(request):
+    movies = Movie.objects.all()
+    context = {
+        'movies': movies,
+    }
+    return render(request, "comedy.html", context)
+def drama(request):
+    movies = Movie.objects.all()
+    context = {
+        'movies': movies,
+    }
+    return render(request, "drama.html", context)
+def horror(request):
+    movies = Movie.objects.all()
+    context = {
+        'movies': movies,
+    }
+    return render(request, "horror.html", context)
+def romance(request):
+    movies = Movie.objects.all()
+    context = {
+        'movies': movies,
+    }
+    return render(request, "romance.html", context)
+def SF(request):
+    movies = Movie.objects.all()
+    context = {
+        'movies': movies,
+    }
+    return render(request, "science_fiction.html", context)
+def fantasy(request):
+    movies = Movie.objects.all()
+    context = {
+        'movies': movies,
+    }
+    return render(request, "fantasy.html", context)

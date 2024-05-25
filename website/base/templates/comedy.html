@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #131313;
+        }
+        .wrapper {
+            position: relative;
+            max-width: 2000px;
+            width: 100%;
+            margin: 0 auto; /* Add this line to center the wrapper horizontally */
+            margin-top: 50px; /* Add margin-top to create some space from the top */
+        }
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            background-color: rgba(0, 0, 0, .5);
+            font-size: 20px;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+        .arrow:hover {
+            background-color: rgba(0, 0, 0, .7);
+        }
+        .arrow.prev {
+            left: 0;
+        }
+        .arrow.next {
+            right: 0;
+        }
+        .card-wrapper {
+            display: flex; /* Change to flex to create rows */
+            flex-wrap: wrap; /* Allow items to wrap to the next row */
+            justify-content: flex-start; /* Align items to the start of each row */
+            padding: 24px;
+            gap: 30px;
+            scrollbar-width: none;
+        }
+        .card-item {
+            width: calc((100% - 6 * 30px) / 7); /* Calculate width for 7 items per row with gap */
+            overflow: hidden;
+            margin-bottom: 30px; /* Add bottom margin for spacing between rows */
+        }
+        .card-item img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .card-info {
+            padding: 10px;
+            color: #fff;
+            margin: 0;
+            font-size: 18px;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+        .card-info .card-title {
+            margin: 0;
+            font-size: 18px;
+        }
+        .card-info .details {
+            display: flex;
+            justify-content: space-between; 
+            width: 100%;
+        }
+        .card-info .runtime,
+        .card-info .rate {
+            margin-top: 5px;
+        }
+        .card-info .rate .star {
+            width: 10px;
+            height: 10px;
+            background-image: url('star.png');
+            background-size: cover;
+            margin-right: 5px;
+        }
+        .card-info .spacer {
+            flex-grow: 1;
+        }
+        .card-title {
+            font-weight: bold;
+            font-size: 15px;
+            text-decoration: none;
+            color: #ffffff;
+            text-align: left;
+        }
+        .card-title:hover {
+            color: #006aff;
+        }
+        .card-info .runtime {
+            font-size: 17px;
+            text-align: right;
+            margin-top: 5px;
+        }
+        
+        @media screen and (max-width: 575px) {
+            .arrow {
+                display: none;
+            }
+            .card-item {
+                width: calc((100% - 2 * 24px)); /* Adjust width for smaller screens */
+            }
+        }
+
+        .return-home-button:hover {
+            background-color: transparent;
+            color: #fff;
+        }
+        .return-home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 8px 16px;
+            background-color: #fff;
+            color: #653160;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight:bold;
+            transition: background-color 0.3s;
+            border: 2px solid #ffffff;
+            
+        }
+
+    </style>
+</head>
+<body>
+    <a href="{% url 'home' %}" class="return-home-button">Return Home</a>
+    <div class="wrapper">
+        <h2 style="color: white; margin-top:50px;">Category : Comedy</h2>
+        <button class="arrow prev"><i class="ri-arrow-left-s-line"></i></button>
+        <button class="arrow next"><i class="ri-arrow-right-s-line"></i></button>
+        <div class="card-wrapper">
+            {% for movie in movies %}
+                {% if movie.genre == 'comedy' %}
+                <div class="card-item">
+                    <img src="{{ movie.image_url }}" alt="{{ movie.title }}" data-id="{{ movie.id }}">
+                    <div class="card-info">
+                        <a href="#" class="card-title">{{ movie.title }}</a>
+                            <div class="details">
+                                <div class="runtime">{{ movie.length }}</div>
+                                <div class="rate">
+                                    <span class="star">★</span>
+                                    <span class="rate-value">{{ movie.rating }}</span>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
