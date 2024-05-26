@@ -27,6 +27,7 @@ class Movie(models.Model):
     rating = models.CharField(max_length=10)
     description = models.TextField()
     image_url = models.URLField()
+    image2_url = models.URLField()
     director = models.CharField(max_length=255)
     stars = models.TextField()
 

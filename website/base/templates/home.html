@@ -596,7 +596,7 @@
                     <img src="movieImage" id="movieImage" alt="Movie Image">
                 </div>
                 <div class="modal-info">
-                    <h5 id="movieModalLabel">Movie Details</h5>
+                    <h5 id="movieModalLabel">Details</h5>
                     <p id="movieTitle"></p>
                     <p id="movieDescription"></p>
                     <p id="movieDirector"></p>
@@ -772,20 +772,30 @@
         $(document).ready(function() {
             $('.card-item img').click(function() {
                 var movieId = $(this).data('id');
-
+        
                 $.ajax({
                     url: `/api/v1/movies/${movieId}/`,
                     method: 'GET',
                     success: function(movie) {
                         $('#movieTitle').text(movie.title);
-                        $('#movieDirector').text('Director: ' + movie.director);
-                        $('#movieRuntime').text('Runtime: ' + movie.length);
-                        $('#movieStars').text('Stars: ' + movie.stars);
-                        $('#movieRating').text('Rating: ' + movie.rating);
                         $('#movieDescription').text(movie.description);
-                        $('#movieImage').attr('src', movie.image_url);
+        
+                        // Check the category of the movie and adjust modal content accordingly
+                        if (movie.genre === 'python') {
+                            $('#movieImage').attr('src', movie.image2_url);
+                            $('#movieRating').text('');
+                            $('#movieRuntime').text('');
+                            $('#movieDirector').text('');
+                            $('#movieStars').text('');
+                        } else {
+                            $('#movieImage').attr('src', movie.image_url);
+                            $('#movieRating').text('Rating: ' + movie.rating);
+                            $('#movieRuntime').text('Runtime: ' + movie.length);
+                            $('#movieDirector').text('Director: ' + movie.director);
+                            $('#movieStars').text('Stars: ' + movie.stars);
+                        }
+        
                         $('#likeButton').data('id', movie.id);
-
                         $('#movieModal').modal('show'); // Use Bootstrap's method to show the modal
                     }
                 });
