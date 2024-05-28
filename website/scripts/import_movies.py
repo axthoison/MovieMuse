@@ -36,17 +36,16 @@ def run():
         movie_data['rating'] = rating.split('(')[0].strip() if rating else "N/A"
         movie_data['description'] = container.find("div", class_="ipc-html-content-inner-div").text.strip() if container.find("div", class_="ipc-html-content-inner-div") else "N/A"
 
-        # Extracting movie URL
+        # extracting movie URL
         movie_url_element = container.find("a", class_="ipc-lockup-overlay ipc-focusable")
         if movie_url_element:
             movie_url = "https://www.imdb.com" + movie_url_element.get("href", "")
-            print("Movie URL:", movie_url)  # Print the movie URL for verification
 
-            # Accessing movie page to get additional details
+            # accessing movie page to get additional details
             movie_response = requests.get(movie_url, headers=headers)
             movie_soup = BeautifulSoup(movie_response.text, 'html.parser')
             
-            # Extracting additional details
+            # extracting additional details
             movie_data['image_url'] = movie_soup.find("meta", property="og:image").get("content", "") if movie_soup.find("meta", property="og:image") else "N/A"
             director_stars = movie_soup.find_all("a", class_="ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link")
             movie_data['director'] = director_stars[0].text.strip() if director_stars else "N/A"
@@ -58,7 +57,7 @@ def run():
         data.append(movie_data)
         time.sleep(5)
 
-    # Saving movies to database
+    # saving movies to database
     with transaction.atomic():       
         for movie_data in data:
             movie = Movie(
