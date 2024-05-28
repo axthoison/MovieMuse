@@ -1,17 +1,10 @@
 from django.urls import path, include
-from .views import authView, home
-from .views import movie_list, movie_create, movie, movie_list_by_genre, director_list
-from .views import like_movie
-from .views import my_liked_movies
-from .views import remove_from_liked
-from .views import action
-from .views import comedy
-from .views import drama
-from .views import horror
-from .views import romance
-from .views import SF
-from .views import fantasy
-from .views import lists,liked_list_api
+from .views import (
+    authView, home, movie_list, movie_create, movie, 
+    movie_list_by_genre, director_list, like_movie, 
+    my_liked_movies, remove_from_liked, action, comedy, 
+    drama, horror, romance, SF, fantasy, lists, liked_list_api
+)
 
 
 
