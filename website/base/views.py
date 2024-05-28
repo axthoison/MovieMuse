@@ -29,12 +29,77 @@ def authView(request):
 
 @api_view(['GET'])
 def movie_list(request):
+    """
+    API view to get the list all the movies with all the details.
+
+    Parameters:
+    - request: HTTP request object
+
+    Returns:
+    - JSON response with the list of movies
+    """
     movies = Movie.objects.all()
     serializer = MovieSerializer(movies, many=True)
     return JsonResponse(serializer.data, safe=False)
 
+@api_view(['GET'])
+def movie_list_by_genre(request, genre):
+    """
+    API view to get movies by genre.
+
+    Parameters:
+    - request: HTTP request object
+    - genre: Genre of the movies to filter
+
+    Returns:
+    - JSON response with the list of movies filtered by genre
+    """
+    movies = Movie.objects.filter(genre__iexact=genre)
+    serializer = MovieSerializer(movies, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+@api_view(['GET'])
+def director_list(request):
+    """
+    API view to get the list of unique directors.
+
+    Parameters:
+    - request: HTTP request object
+
+    Returns:
+    - JSON response with the list of unique directors
+    """
+    directors = Movie.objects.values_list('director', flat=True).distinct()
+    return JsonResponse(list(directors), safe=False)
+
+@api_view(['GET'])
+@login_required
+def liked_list_api(request):
+    """
+    API view to get the list of movies liked by the current user.
+
+    Parameters:
+    - request: HTTP request object
+
+    Returns:
+    - JSON response with the list of liked movies
+    """
+    liked_movies = UserLikedMovie.objects.filter(user=request.user).select_related('movie')
+    serializer = MovieSerializer([liked.movie for liked in liked_movies], many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+
 @api_view(['POST'])
 def movie_create(request):
+    """
+    API view to create a new movie.
+
+    Parameters:
+    - request: HTTP request object
+
+    Returns:
+    - JSON response with the newly created movie or error messages
+    """
     serializer = MovieSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -44,6 +109,16 @@ def movie_create(request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def movie(request, pk):
+    """
+    API view to get, update, or delete a specific movie.
+
+    Parameters:
+    - request: HTTP request object
+    - pk: Primary key of the movie
+
+    Returns:
+    - JSON response with the movie details or error messages
+    """
     if request.method == 'GET':
         try:
             movie = Movie.objects.get(pk=pk)
@@ -105,7 +180,6 @@ def remove_from_liked(request):
         return redirect('my_liked_movies')
     return redirect('home')  # Redirect to home page if not a POST request
 
-import pandas as pd
 def generate_recommendations(liked_movies, all_movies):
     
     liked_movie_ids = set(liked_movie.movie.id for liked_movie in liked_movies)
@@ -212,3 +286,6 @@ def fantasy(request):
         'movies': movies,
     }
     return render(request, "fantasy.html", context)
+def lists(request):
+
+    return render(request, "lists.html")
